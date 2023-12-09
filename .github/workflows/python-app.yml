@@ -41,7 +41,6 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install --no-root
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
   lint:    
     strategy:
@@ -70,7 +69,6 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install --no-root
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: poetry lint
       run: |
         poetry run task lint
