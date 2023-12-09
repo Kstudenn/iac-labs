@@ -16,7 +16,7 @@ jobs:
   build:
     strategy:
         matrix:
-          os: [ "windows-latest" ]
+          os: [ "ubuntu-latest", "windows-latest" ]
     runs-on: ${{ matrix.os }}
     
     defaults:
@@ -42,7 +42,7 @@ jobs:
   lint:    
     strategy:
       matrix:
-        os: [ "windows-latest" ]      
+        os: [ "ubuntu-latest", "windows-latest" ]      
     runs-on: ${{ matrix.os }}
       
     defaults:
