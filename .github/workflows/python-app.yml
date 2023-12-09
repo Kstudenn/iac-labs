@@ -16,7 +16,7 @@ jobs:
   build:
     strategy:
         matrix:
-          os: [ "ubuntu-latest", "windows-latest" ]
+          os: [ "windows-latest" ]
     runs-on: ${{ matrix.os }}
     
     defaults:
@@ -38,14 +38,11 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: false
         installer-parallel: true
-    - name: Install dependencies
-      run: |
-        poetry install --no-root
 
   lint:    
     strategy:
       matrix:
-        os: [ "ubuntu-latest", "windows-latest" ]      
+        os: [ "windows-latest" ]      
     runs-on: ${{ matrix.os }}
       
     defaults:
@@ -66,9 +63,7 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: false
         installer-parallel: true 
-    - name: Install dependencies
-      run: |
-        poetry install --no-root
+        
     - name: poetry lint
       run: |
         poetry run task lint
