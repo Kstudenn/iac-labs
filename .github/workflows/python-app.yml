@@ -35,6 +35,10 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: false
         installer-parallel: true
+    - name: Install dependencies
+      run: |
+        poetry install --no-root
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
   lint:
       runs-on: "ubuntu-latest"
