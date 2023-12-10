@@ -19,7 +19,7 @@ jobs:
         os: [ "ubuntu-latest", "windows-latest" ]
     defaults:
       run:
-        shell: bash
+        #shell: bash
         working-directory: ./example-app
     runs-on: ${{ matrix.os }}
     steps:
@@ -36,10 +36,9 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
       - name: Install dependencies
-        run: poetry install --no-interaction --no-root
-      - run: |
+        run: |
           source $VENV
-          pytest --version
+          poetry install --no-interaction --no-root
       
   lint:    
     strategy:
@@ -49,7 +48,7 @@ jobs:
       
     defaults:
       run:
-        shell: bash
+        #shell: bash
         working-directory: ./example-app
     needs: build
      
@@ -65,7 +64,9 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: true
     - name: Install dependencies
-      run: poetry install --no-interaction --no-root
+      run: |
+        source $VENV
+        poetry install --no-interaction --no-root
         
     #- name: poetry lint
     #  run: |
