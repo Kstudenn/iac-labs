@@ -39,14 +39,14 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
       - name: Cache linux build venv
-        if: matrix.os == 'Ubuntu'
+        if: ${{ runner.os }} == 'Ubuntu'
         id: cached-linux-poetry-dependencies
         uses: actions/cache@v3
         with:
           path: /home/runner/work/iac-labs/iac-labs/example-app/
           key: ${{ runner.os }}-venv
       - name: Cache windows build venv
-        if: matrix.os == 'Ubuntu'
+        if: ${{ runner.os }} == 'Windows'
         id: cached-windows-poetry-dependencies
         uses: actions/cache@v3
         with:
