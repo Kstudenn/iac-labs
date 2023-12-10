@@ -51,7 +51,6 @@ jobs:
       run:
         shell: bash
         working-directory: ./example-app
-      
     needs: build
      
     steps:
@@ -72,12 +71,15 @@ jobs:
     #  run: |
     #    source $VENV
     #    poetry run task lint
-    - run: |
-        source .venv/scripts/activate
-        pytest --version
-      if: runner.os == 'Windows'
-    - run: |
-        source .venv/bin/activate
-        pytest --version
-      if: runner.os != 'Windows'
+    - name: poetry lint
+      run: |
+        poetry run task lint
+    #- run: |
+    #    source .venv/scripts/activate
+    #    poetry run task lint
+    #  if: runner.os == 'Windows'
+    #- run: |
+    #    source .venv/bin/activate
+    #    poetry run task lint
+    #  if: runner.os != 'Windows'
 
