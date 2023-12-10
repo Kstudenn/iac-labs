@@ -45,11 +45,11 @@ jobs:
           path: /home/runner/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-venv
       
-  lint:    
+  lint-formatter-security:    
     strategy:
       matrix:
         os: [ "ubuntu-latest", "windows-latest" ]
-        steps: [ 'lint', 'formatter', 'security', 'test' ]
+        steps: [ 'lint', 'formatter', 'security']
     runs-on: ${{ matrix.os }}
       
     defaults:
@@ -92,7 +92,7 @@ jobs:
         working-directory: ./example-app
     needs: 
       - build
-      - lint
+      - lint-formatter-security
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
