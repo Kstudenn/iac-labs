@@ -19,9 +19,10 @@ jobs:
         os: [ "ubuntu-latest", "windows-latest" ]
     defaults:
       run:
-        #shell: bash
+        shell: bash
         working-directory: ./example-app
-    runs-on: ${{ matrix.os }}
+    #runs-on: ${{ matrix.os }}
+    runs-on: "ubuntu-latest"
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -35,29 +36,20 @@ jobs:
         with:
           virtualenvs-create: true
           virtualenvs-in-project: true
-      #- name: Install dependencies
-        #run: |
-        #  poetry install --no-interaction --no-root
-      - name: Install Windows dependencies
+      - name: Install dependencies
         run: |
-          source .venv/scripts/activate
           poetry install --no-interaction --no-root
-        if: runner.os == 'Windows'
-      - name: Install Linux dependencies
-        run: |
-          source .venv/bin/activate
-          poetry install --no-interaction --no-root
-        if: runner.os != 'Windows'
       
   lint:    
     strategy:
       matrix:
         os: [ "ubuntu-latest", "windows-latest" ]   
-    runs-on: ${{ matrix.os }}
+    #runs-on: ${{ matrix.os }}
+    runs-on: "ubuntu-latest"
       
     defaults:
       run:
-        #shell: bash
+        shell: bash
         working-directory: ./example-app
     needs: build
      
@@ -72,36 +64,13 @@ jobs:
       with:
         virtualenvs-create: true
         virtualenvs-in-project: true
-    #- name: Install dependencies
-    #  run: |
-    #    source $VENV
-    #    poetry install --no-interaction --no-root
-    - name: Install Windows dependencies
+    - name: Install dependencies
       run: |
-        source .venv/scripts/activate
-        poetry install --no-interaction --no-root
-      if: runner.os == 'Windows'
-    - name: Install Linux dependencies
+        source $VENV
+        poetry install --no-interaction --no-root 
+    - name: poetry lint
       run: |
-        source .venv/bin/activate
-        poetry install --no-interaction --no-root
-      if: runner.os != 'Windows'    
-
-    - name: widows poetry lint
-      run: |
-        source .venv/scripts/activate
         poetry run task lint
-      if: runner.os == 'Windows'
-    - name: linux poetry lint
-      run: |
-        source .venv/bin/activate
-        poetry run task lint
-      if: runner.os != 'Windows'
-    
-    #- name: poetry lint
-    #  run: |
-    #    source $VENV
-    #    poetry run task lint
     
     #- name: poetry lint
     #  run: |
