@@ -38,11 +38,19 @@ jobs:
           virtualenvs-in-project: true
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
-      - name: Cache build venv
-        id: cached-poetry-dependencies
+      - name: Cache linux build venv
+        if: matrix.os == 'Ubuntu'
+        id: cached-linux-poetry-dependencies
         uses: actions/cache@v3
         with:
           path: /home/runner/work/iac-labs/iac-labs/example-app/
+          key: ${{ runner.os }}-venv
+      - name: Cache windows build venv
+        if: matrix.os == 'Ubuntu'
+        id: cached-windows-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: D:\a\iac-labs\iac-labs
           key: ${{ runner.os }}-venv
       
   lint-formatter-security:    
@@ -110,7 +118,7 @@ jobs:
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
-        path: /home/runner/.cache/pypoetry/virtualenvs
+        path: /home/runner/work/iac-labs/iac-labs/example-app/
         key: ${{ runner.os }}-venv
     - name: poetry lint
       run: |
