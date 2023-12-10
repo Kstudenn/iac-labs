@@ -49,6 +49,7 @@ jobs:
       
     defaults:
       run:
+        shell: bash
         working-directory: ./example-app
       
     needs: build
@@ -65,7 +66,7 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: true
     - name: Install dependencies
-      run: poetry install --no-root
+      run: poetry install --no-interaction --no-root
         
     #- name: poetry lint
     #  run: |
