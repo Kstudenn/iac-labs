@@ -21,8 +21,8 @@ jobs:
       run:
         shell: bash
         working-directory: ./example-app
-    #runs-on: ${{ matrix.os }}
-    runs-on: "ubuntu-latest"
+    runs-on: ${{ matrix.os }}
+    #runs-on: "ubuntu-latest"
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -44,8 +44,8 @@ jobs:
     strategy:
       matrix:
         os: [ "ubuntu-latest", "windows-latest" ]   
-    #runs-on: ${{ matrix.os }}
-    runs-on: "ubuntu-latest"
+    runs-on: ${{ matrix.os }}
+    #runs-on: "ubuntu-latest"
       
     defaults:
       run:
@@ -71,17 +71,3 @@ jobs:
     - name: poetry lint
       run: |
         poetry run task lint
-    
-    #- name: poetry lint
-    #  run: |
-    #    poetry run task lint
-    
-    #- run: |
-    #    source .venv/scripts/activate
-    #    poetry run task lint
-    #  if: runner.os == 'Windows'
-    #- run: |
-    #    source .venv/bin/activate
-    #    poetry run task lint
-    #  if: runner.os != 'Windows'
-
