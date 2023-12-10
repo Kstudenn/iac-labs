@@ -16,33 +16,36 @@ jobs:
   build:
     strategy:
       matrix: 
-        os: [ "ubuntu-latest"]
+        os: [ "ubuntu-latest", "windows-latest" ]
     defaults:
       run:
         shell: bash
-        working-directory: ./example-app
     runs-on: ${{ matrix.os }}
-        
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install Poetry Action
-      uses: snok/install-poetry@v1.3.4
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-        installer-parallel: true
-    - name: Install dependencies
-      run: poetry install --no-interaction --no-root
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+      - name: Install library
+        run: poetry install --no-interaction
+      - run: |
+          source $VENV
+          pytest --version
       
-
   lint:    
     strategy:
       matrix:
-        os: [ "ubuntu-latest" ]      
+        os: [ "ubuntu-latest", "windows-latest" ]   
     runs-on: ${{ matrix.os }}
       
     defaults:
@@ -69,11 +72,11 @@ jobs:
     #    source $VENV
     #    poetry run task lint
     - run: |
+      if: runner.os == 'Windows'
         source .venv/scripts/activate
         pytest --version
-      if: runner.os == 'Windows'
     - run: |
+      if: runner.os != 'Windows'
         source .venv/bin/activate
         pytest --version
-      if: runner.os != 'Windows'
 
