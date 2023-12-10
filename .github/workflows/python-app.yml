@@ -43,14 +43,16 @@ jobs:
         id: cached-ubuntu-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
+          path: |
+            source $VENV
           key: ${{ runner.os }}-venv
       - name: Cache windows build venv
         if: ${{ runner.os }} != "Ubuntu"
         id: cached-windows-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: D:\a\iac-labs\iac-labs\example-app\.venv
+          path: |
+            source $VENV
           key: ${{ runner.os }}-venv
 
   lint:    
@@ -76,14 +78,16 @@ jobs:
       id: cached-ubuntu-poetry-dependencies
       uses: actions/cache@v3
       with:
-        path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
+        path: |
+          source $VENV
         key: ${{ runner.os }}-venv
     - name: Cache windows build venv
       if: ${{ runner.os }} != "Ubuntu"
       id: cached-windows-poetry-dependencies
       uses: actions/cache@v3
       with:
-        path: D:\a\iac-labs\iac-labs\example-app\.venv
+        path: |
+          source $VENV
         key: ${{ runner.os }}-venv
     - name: poetry lint
       run: |
