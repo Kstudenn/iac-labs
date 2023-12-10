@@ -64,8 +64,8 @@ jobs:
       with:
         virtualenvs-create: true
         virtualenvs-in-project: true
-    #- name: Install dependencies
-    #  run: poetry install --no-interaction --no-root
+    - name: Install dependencies
+      run: poetry install --no-root
         
     #- name: poetry lint
     #  run: |
