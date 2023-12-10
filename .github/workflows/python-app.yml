@@ -64,16 +64,16 @@ jobs:
         virtualenvs-in-project: false
         installer-parallel: true 
         
-    - name: poetry lint
-      run: |
-        source $VENV
-        poetry run task lint
-    #- run: |
-    #    source .venv/scripts/activate
-    #    pytest --version
-    #  if: runner.os == 'Windows'
-    #- run: |
-    #    source .venv/bin/activate
-    #    pytest --version
-    #  if: runner.os != 'Windows'
+    #- name: poetry lint
+    #  run: |
+    #    source $VENV
+    #    poetry run task lint
+    - run: |
+        source .venv/scripts/activate
+        pytest --version
+      if: runner.os == 'Windows'
+    - run: |
+        source .venv/bin/activate
+        pytest --version
+      if: runner.os != 'Windows'
 
