@@ -72,10 +72,10 @@ jobs:
       with:
         virtualenvs-create: true
         virtualenvs-in-project: true
-    - name: Install dependencies
-      run: |
-        source $VENV
-        poetry install --no-interaction --no-root
+    #- name: Install dependencies
+    #  run: |
+    #    source $VENV
+    #    poetry install --no-interaction --no-root
     - name: Install Windows dependencies
       run: |
         source .venv/scripts/activate
@@ -86,6 +86,18 @@ jobs:
         source .venv/bin/activate
         poetry install --no-interaction --no-root
       if: runner.os != 'Windows'    
+
+    - name: widows poetry lint
+      run: |
+        source .venv/scripts/activate
+        poetry run task lint
+      if: runner.os == 'Windows'
+    - name: linux poetry lint
+      run: |
+        source .venv/bin/activate
+        poetry run task lint
+      if: runner.os != 'Windows'
+    
     #- name: poetry lint
     #  run: |
     #    source $VENV
