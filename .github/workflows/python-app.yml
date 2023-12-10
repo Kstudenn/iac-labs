@@ -72,11 +72,11 @@ jobs:
     #    source $VENV
     #    poetry run task lint
     - run: |
-      if: runner.os == 'Windows'
         source .venv/scripts/activate
         pytest --version
+      if: runner.os == 'Windows'
     - run: |
-      if: runner.os != 'Windows'
         source .venv/bin/activate
         pytest --version
+      if: runner.os != 'Windows'
 
