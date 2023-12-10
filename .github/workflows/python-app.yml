@@ -48,7 +48,8 @@ jobs:
   lint:    
     strategy:
       matrix:
-        os: [ "ubuntu-latest", "windows-latest" ]   
+        os: [ "ubuntu-latest", "windows-latest" ]
+        steps: [ 'lint', 'formatter', 'security', 'test' ]
     runs-on: ${{ matrix.os }}
       
     defaults:
@@ -75,78 +76,10 @@ jobs:
       with:
         path: /home/runner/.cache/pypoetry/virtualenvs
         key: ${{ runner.os }}-venv
-    - name: poetry lint
+    - name: poetry ${{matrix.steps))
       run: |
-        poetry run task lint
-
-  formatter:    
-    strategy:
-      matrix:
-        os: [ "ubuntu-latest", "windows-latest" ]   
-    runs-on: ${{ matrix.os }}
-      
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./example-app
-    needs: build
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install Poetry Action
-      uses: snok/install-poetry@v1.3.4
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-    - name: Install dependencies
-      run: poetry install --no-interaction --no-root
-    - name: Cache build venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/.cache/pypoetry/virtualenvs
-        key: ${{ runner.os }}-venv
-    - name: poetry formatter
-      run: |
-        poetry run task formatter
-
-  security:    
-    strategy:
-      matrix:
-        os: [ "ubuntu-latest", "windows-latest" ]   
-    runs-on: ${{ matrix.os }}
-      
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./example-app
-    needs: build
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install Poetry Action
-      uses: snok/install-poetry@v1.3.4
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-    - name: Install dependencies
-      run: poetry install --no-interaction --no-root
-    - name: Cache build venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/.cache/pypoetry/virtualenvs
-        key: ${{ runner.os }}-venv
-    - name: poetry lint
-      run: |
-        poetry run task security
-
+        poetry run task ${{matrix.steps))
+        
   test:    
     strategy:
       matrix:
@@ -160,8 +93,6 @@ jobs:
     needs: 
       - build
       - lint
-      - security
-      - formatter
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
