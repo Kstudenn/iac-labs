@@ -65,7 +65,7 @@ jobs:
         path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
         key: ${{ runner.os }}-venv
     - name: Install dependencies
-      if: steps.cache-primes.outputs.cache-hit != 'true'
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
     - name: poetry lint
       run: |
