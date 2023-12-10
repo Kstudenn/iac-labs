@@ -43,6 +43,12 @@ jobs:
       - run: |
           source $VENV
           pytest --version
+      - name: Cache build venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-venv
       
   lint:    
     strategy:
@@ -68,8 +74,14 @@ jobs:
       with:
         virtualenvs-create: true
         virtualenvs-in-project: true
-    - name: Install dependencies
-      run: poetry install --no-interaction --no-root
+        
+    - name: Cache build venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-venv
+
     - name: poetry lint
       run: |
         poetry run task lint
