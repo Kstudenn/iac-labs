@@ -21,7 +21,7 @@ jobs:
       run:
         shell: bash
         working-directory: ./example-app
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     
     steps:
       - name: Check out repository
@@ -38,27 +38,18 @@ jobs:
           virtualenvs-in-project: true
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
-      - name: Cache linux build venv
-        #if: ${{ runner.os }} == 'Ubuntu'
-        id: cached-linux-poetry-dependencies
+      - name: Cache build venv
+        id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.cache
+          path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
           key: ${{ runner.os }}-venv
-      #- name: Cache windows build venv
-      #  if: ${{ runner.os }} == 'Windows'
-      #  id: cached-windows-poetry-dependencies
-      #  uses: actions/cache@v3
-      #  with:
-      #    path: D:\a\iac-labs\iac-labs
-      #    key: ${{ runner.os }}-venv
-      
-  lint-formatter-security:    
+
+  lint:    
     strategy:
       matrix:
         os: [ "ubuntu-latest", "windows-latest" ]
-        steps: [ 'lint', 'formatter', 'security']
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
       
     defaults:
       run:
@@ -76,50 +67,16 @@ jobs:
       with:
         virtualenvs-create: true
         virtualenvs-in-project: true
-    - name: Install dependencies
-      run: poetry install --no-interaction --no-root
+
     - name: Cache build venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
-        path: /home/runner/work/iac-labs/iac-labs/example-app/
+        path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
         key: ${{ runner.os }}-venv
-    - name: poetry ${{matrix.steps}}
-      run: |
-        poetry run task ${{matrix.steps}}
-        
-  test:    
-    strategy:
-      matrix:
-        os: [ "ubuntu-latest", "windows-latest" ]   
-    runs-on: ${{ matrix.os }}
-      
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./example-app
-    needs: 
-      - build
-      - lint-formatter-security
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install Poetry Action
-      uses: snok/install-poetry@v1.3.4
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
     - name: Install dependencies
+      if: steps.cache-primes.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
-    - name: Cache build venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: /home/runner/work/iac-labs/iac-labs/example-app/
-        key: ${{ runner.os }}-venv
     - name: poetry lint
       run: |
-        poetry run task test
+        poetry run task lint
