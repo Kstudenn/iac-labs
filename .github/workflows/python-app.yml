@@ -22,7 +22,6 @@ jobs:
         shell: bash
         working-directory: ./example-app
     runs-on: ${{ matrix.os }}
-    #runs-on: "ubuntu-latest"
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -37,15 +36,16 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
       - name: Install dependencies
-        run: |
-          poetry install --no-interaction --no-root
+        run: poetry install --no-interaction --no-root
+      - run: |
+          source $VENV
+          pytest --version
       
   lint:    
     strategy:
       matrix:
         os: [ "ubuntu-latest", "windows-latest" ]   
     runs-on: ${{ matrix.os }}
-    #runs-on: "ubuntu-latest"
       
     defaults:
       run:
@@ -65,9 +65,20 @@ jobs:
         virtualenvs-create: true
         virtualenvs-in-project: true
     - name: Install dependencies
-      run: |
-        source $VENV
-        poetry install --no-interaction --no-root 
+      run: poetry install --no-interaction --no-root
+        
+    #- name: poetry lint
+    #  run: |
+    #    source $VENV
+    #    poetry run task lint
     - name: poetry lint
       run: |
         poetry run task lint
+    #- run: |
+    #    source .venv/scripts/activate
+    #    poetry run task lint
+    #  if: runner.os == 'Windows'
+    #- run: |
+    #    source .venv/bin/activate
+    #    poetry run task lint
+    #  if: runner.os != 'Windows'
