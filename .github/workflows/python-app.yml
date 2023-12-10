@@ -88,3 +88,115 @@ jobs:
     - name: poetry lint
       run: |
         poetry run task lint
+
+  formatter:    
+    strategy:
+      matrix:
+        os: [ "ubuntu-latest", "windows-latest" ]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+    needs: build
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Poetry Action
+      uses: snok/install-poetry@v1.3.4
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    - name: Cache ubuntu build venv
+      if: ${{ runner.os }} == "Linux"
+      id: cached-ubuntu-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
+        key: ${{ runner.os }}-venv
+    - name: Cache windows build venv
+      if: ${{ runner.os }} != "Linux"
+      id: cached-windows-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: D:\a\iac-labs\iac-labs\example-app\.venv
+        key: ${{ runner.os }}-venv
+    - name: poetry formatter
+      run: |
+        poetry run task formatter
+
+  security:    
+    strategy:
+      matrix:
+        os: [ "ubuntu-latest", "windows-latest" ]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+    needs: build
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Poetry Action
+      uses: snok/install-poetry@v1.3.4
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    - name: Cache ubuntu build venv
+      if: ${{ runner.os }} == "Linux"
+      id: cached-ubuntu-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
+        key: ${{ runner.os }}-venv
+    - name: Cache windows build venv
+      if: ${{ runner.os }} != "Linux"
+      id: cached-windows-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: D:\a\iac-labs\iac-labs\example-app\.venv
+        key: ${{ runner.os }}-venv
+    - name: poetry security
+      run: |
+        poetry run task security
+
+  test:    
+    strategy:
+      matrix:
+        os: [ "ubuntu-latest", "windows-latest" ]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+    needs: 
+      - build
+      - lint
+      - formatter
+      - security
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Poetry Action
+      uses: snok/install-poetry@v1.3.4
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    - name: Cache ubuntu build venv
+      if: ${{ runner.os }} == "Linux"
+      id: cached-ubuntu-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
+        key: ${{ runner.os }}-venv
+    - name: Cache windows build venv
+      if: ${{ runner.os }} != "Linux"
+      id: cached-windows-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: D:\a\iac-labs\iac-labs\example-app\.venv
+        key: ${{ runner.os }}-venv
+    - name: poetry test
+      run: |
+        poetry run task test
