@@ -46,12 +46,12 @@ jobs:
   lint:    
 
     runs-on: ubuntu-latest
-      
     defaults:
       run:
         shell: bash
         working-directory: ./example-app
     needs: build
+    
     steps:
     - uses: actions/checkout@v3
     - name: Install Poetry Action
@@ -59,8 +59,6 @@ jobs:
       with:
         virtualenvs-create: true
         virtualenvs-in-project: true
-
-
     - name: Cache build venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
@@ -73,3 +71,35 @@ jobs:
     - name: poetry lint
       run: |
         poetry run task lint
+
+  test:    
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./example-app
+    needs: 
+      - build
+      - lint
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Poetry Action
+      uses: snok/install-poetry@v1.3.4
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    - name: Cache build venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
+        key: ${{ runner.os }}-venv
+    - name: Install dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: poetry install --no-interaction --no-root
+    - name: poetry lint
+      run: |
+        poetry run task test
+      
