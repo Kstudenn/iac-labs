@@ -38,11 +38,19 @@ jobs:
           virtualenvs-in-project: true
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
-      - name: Cache build venv
-        id: cached-poetry-dependencies
+      - name: Cache ubuntu build venv
+        if: ${{ runner.os }} == "Ubuntu"
+        id: cached-ubuntu-poetry-dependencies
         uses: actions/cache@v3
         with:
           path: /home/runner/work/iac-labs/iac-labs/example-app/.venv
+          key: ${{ runner.os }}-venv
+      - name: Cache windows build venv
+        if: ${{ runner.os }} != "Ubuntu"
+        id: cached-windows-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: D:\a\iac-labs\iac-labs\example-app\.venv
           key: ${{ runner.os }}-venv
 
   lint:    
