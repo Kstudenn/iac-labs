@@ -76,7 +76,7 @@ jobs:
       with:
         path: /home/runner/.cache/pypoetry/virtualenvs
         key: ${{ runner.os }}-venv
-    - name: poetry ${{matrix.steps))
+    - name: poetry lint
       run: |
         poetry run task ${{matrix.steps))
         
