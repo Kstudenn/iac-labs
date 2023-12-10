@@ -42,7 +42,7 @@ jobs:
         id: cached-poetry-dependencies
         uses: actions/cache@v3
         with:
-          path: /home/runner/.cache/pypoetry/virtualenvs
+          path: /home/runner/work/iac-labs/iac-labs/example-app/
           key: ${{ runner.os }}-venv
       
   lint-formatter-security:    
@@ -74,7 +74,7 @@ jobs:
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
-        path: /home/runner/.cache/pypoetry/virtualenvs
+        path: /home/runner/work/iac-labs/iac-labs/example-app/
         key: ${{ runner.os }}-venv
     - name: poetry ${{matrix.steps}}
       run: |
